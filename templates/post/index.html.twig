@@ -1,35 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post index{% endblock %}
+{% block title %}Actualité{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl text-red-500">Post index</h1>
+    <h1 class="text-3xl text-center my-4">Mur d'Actualité</h1>
     
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Data</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="posts-container mx-auto max-w-4xl">
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.data ? post.data|json_encode : '' }}</td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="post bg-white shadow-md rounded p-4 mb-4">
+                <div class="post-header flex items-center mb-2">
+                    <div class="user-avatar mr-4">
+                        {% if post.idUser.avatar %}
+                            <img src="{{ post.idUser.avatar }}" alt="{{ post.idUser.email }}" class="w-12 h-12 rounded-full">
+                        {% else %}
+                            <img src="/path/to/default/avatar.png" alt="Default Avatar" class="w-12 h-12 rounded-full">
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <h2 class="text-xl font-semibold">{{ post.idUser.email }}</h2>
+                        <p class="text-sm text-gray-500">{{ post.createdAt|date('d M Y H:i') }}</p>
+                    </div>
+                </div>
+                <div class="post-content mb-2">
+                    <p>{{ post.data.message_content }}</p>
+                    {% if post.data.image_src %}
+                        <img src="{{ post.data.image_src }}" alt="{{ post.data.image_alt }}" class="w-full mt-2">
+                    {% endif %}
+                    {% if post.data.video_src %}
+                        <video controls class="w-full mt-2">
+                            <source src="{{ post.data.video_src }}" type="video/mp4">
+                            {{ post.data.video_alt }}
+                        </video>
+                    {% endif %}
+                </div>
+                <div class="post-actions flex justify-end">
+                    <a href="{{ path('app_post_show', {'id': post.id}) }}" class="text-blue-500 mr-2">Voir</a>
+                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="text-blue-500">Modifier</a>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
+            <p class="text-center">Aucun post trouvé</p>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
-    <a href="{{ path('app_post_new') }}">Create new</a>
+    <div class="text-center mt-6">
+        <a href="{{ path('app_post_new') }}" class="text-white bg-blue-500 px-4 py-2 rounded">Créer un nouveau post</a>
+    </div>
 {% endblock %}
