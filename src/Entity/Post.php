@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
+use DateTime;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PostRepository;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\Table(name: '`post`')]
@@ -23,6 +24,14 @@ class Post
 
     #[ORM\Column(type: 'json')]
     private array $data = [];
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTime $created_at;
+
+    public function __construct()
+    {
+        $this->created_at = new DateTime();
+    }
 
     public function getId(): ?Uuid
     {
@@ -50,6 +59,17 @@ class Post
     {
         $this->data = $data;
 
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
         return $this;
     }
 }
