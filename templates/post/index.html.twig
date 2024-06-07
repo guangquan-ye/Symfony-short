@@ -3,7 +3,7 @@
 {% block title %}Actualité{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl text-center my-4">Mur d'Actualité</h1>
+    <h1 class="text-3xl text-center my-4">Fil d'Actualité</h1>
     
     <div class="posts-container mx-auto max-w-4xl">
         {% for post in posts %}
@@ -35,14 +35,19 @@
                     {% endif %}
                 </div>
                 <div class="post-actions flex justify-end">
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="text-blue-500">Modifier</a>
+                    {% if app.user and app.user == post.idUser %}
+                        <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="text-blue-500 mr-2">Modifier</a>
+                    {% else %}
+                        <a href="{{ path('app_comment_new', {'id': post.id}) }}" class="text-blue-500">Commenter</a>
+                    {% endif %}
                 </div>
             </div>
         {% else %}
             <p class="text-center">Aucun post trouvé</p>
         {% endfor %}
+        </a>
     </div>
-    </a>
+
 
     <div class="text-center mt-6">
         <a href="{{ path('app_post_new') }}" class="text-white bg-blue-500 px-4 py-2 rounded">Créer un nouveau post</a>

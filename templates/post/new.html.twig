@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Post{% endblock %}
+{% block title %}Nouveau Post{% endblock %}
 
 {% block body %}
-    <h1>Create new Post</h1>
+    <h1 class="text-3xl text-center my-4">Créer un Nouveau Post</h1>
 
-    {{ include('post/_form.html.twig') }}
+    <div class="post-create-container mx-auto max-w-4xl bg-white shadow-md rounded p-6 mb-4">
+        {{ include('post/_form.html.twig', {'button_label': 'Envoyer'}) }}
+    </div>
 
-    <a href="{{ path('app_post_index') }}">back to list</a>
+    <div class="actions-container mx-auto max-w-4xl flex justify-between mt-6">
+        <a href="{{ path('app_post_index') }}" class="text-blue-500">Retour à la liste</a>
+    </div>
 {% endblock %}
