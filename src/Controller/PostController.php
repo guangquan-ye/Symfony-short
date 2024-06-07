@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Entity\Comment;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use App\Form\CommentType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,10 +49,24 @@ class PostController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager): Response
     {
+        $comment = new Comment();
+        $form = $formFactory->create(CommentType::class, $comment);
+    
+        // Handle the form submission
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setIdPost($post);
+            $entityManager->persist($comment);
+            $entityManager->flush();
+    
+            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+        }
+    
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'form' => $form->createView(),  // Pass the form to the template
         ]);
     }
 

@@ -7,6 +7,7 @@
     
     <div class="posts-container mx-auto max-w-4xl">
         {% for post in posts %}
+        <a href="{{ path('app_post_show', {'id': post.id}) }}">
             <div class="post bg-white shadow-md rounded p-4 mb-4">
                 <div class="post-header flex items-center mb-2">
                     <div class="user-avatar mr-4">
@@ -34,7 +35,6 @@
                     {% endif %}
                 </div>
                 <div class="post-actions flex justify-end">
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}" class="text-blue-500 mr-2">Voir</a>
                     <a href="{{ path('app_post_edit', {'id': post.id}) }}" class="text-blue-500">Modifier</a>
                 </div>
             </div>
@@ -42,6 +42,7 @@
             <p class="text-center">Aucun post trouvé</p>
         {% endfor %}
     </div>
+    </a>
 
     <div class="text-center mt-6">
         <a href="{{ path('app_post_new') }}" class="text-white bg-blue-500 px-4 py-2 rounded">Créer un nouveau post</a>
